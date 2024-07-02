@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Button, FlatList, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, Text, Button, FlatList, StyleSheet, Image, TouchableOpacity, ImageBackground } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const HomeScreen = ({ navigation }) => {
@@ -80,7 +80,9 @@ const HomeScreen = ({ navigation }) => {
         <Image style={styles.logo} source={require('../assets/Logo.png')}/>
         <View style={styles.searchShop}>
         <Image source={require('../assets/Search.png')}/>
-        <Image style={{marginLeft: 10}} source={require('../assets/shoppingBag.png')}/>
+        <TouchableOpacity onPress={() => navigation.navigate('Cart')} style={{marginLeft: 10}}>
+            <Image source={require('../assets/shoppingBag.png')}/>
+          </TouchableOpacity>
         </View>
       </View>
       <FlatList
@@ -88,14 +90,18 @@ const HomeScreen = ({ navigation }) => {
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <View style={styles.productContainer}>
-            <Image source={item.image} style={styles.productImage} />
+           <View style={styles.product}>
+           <Image source={item.image} style={styles.productImage} />
+            <ImageBackground>
+            <TouchableOpacity onPress={() => addToCart(item)} style={styles.addToCartButton}>
+                <Image source={require('../assets/add_circle.png')}/>
+            </TouchableOpacity>
+            </ImageBackground>
+           </View>
             <View style={styles.productDetails}>
               <Text style={styles.productTitle}>{item.title}</Text>
               <Text style={styles.productDescription}>{item.description}</Text>
               <Text style={styles.productPrice}>${item.price}</Text>
-              <TouchableOpacity onPress={() => addToCart(item)} style={styles.addToCartButton}>
-                <Text style={styles.addToCartButtonText}>Add to Cart</Text>
-              </TouchableOpacity>
             </View>
           </View>
         )}
@@ -147,10 +153,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 10,
+    color: '#D39679'
   },
   addToCartButton: {
-    backgroundColor: '#007bff',
-    padding: 10,
     borderRadius: 5,
     alignItems: 'center',
   },
