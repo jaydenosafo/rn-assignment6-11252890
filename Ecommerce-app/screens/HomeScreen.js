@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Button, FlatList, StyleSheet, Image, TouchableOpacity, ImageBackground } from 'react-native';
+import { View, Text, Button, FlatList, StyleSheet, Image, TouchableOpacity, ImageBackground, SafeAreaView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const HomeScreen = ({ navigation }) => {
@@ -8,7 +8,7 @@ const HomeScreen = ({ navigation }) => {
       id: '1',
       image: require('../assets/dress1.png'),
       title: 'Office Wear',
-      description: 'reversible angora cardigan',
+      description: 'Office Wear For Your Office',
       price: 120
     },
     {
@@ -22,14 +22,14 @@ const HomeScreen = ({ navigation }) => {
       id: '3',
       image: require('../assets/dress3.png'),
       title: 'Church Wear',
-      description: 'reversible angora cardigan',
+      description: 'Recycle Bounce Knit Cardigan Pink',
       price: 120
     },
     {
       id: '4',
       image: require('../assets/dress4.png'),
       title: 'Lamerei',
-      description: 'reversible angora cardigan',
+      description: 'Recycle Bouncle Knit Cardiagn Pink',
       price: 120
     },
     {
@@ -74,7 +74,7 @@ const HomeScreen = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <Image source={require('../assets/Menu.png')}/>
         <Image style={styles.logo} source={require('../assets/Logo.png')}/>
@@ -85,18 +85,29 @@ const HomeScreen = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       </View>
+
+      <View style={styles.subHeader}>
+          <Text style={styles.subHeaderText}>OUR STORY</Text>
+          <View style={styles.filterList}>
+            <View style={styles.filter}>
+            <Image source={require('../assets/Listview.png')}/>
+          </View>
+          <View style={styles.filter}>
+          <Image source={require('../assets/Filter.png')}/>
+          </View>
+          </View>
+          
+      </View>
       <FlatList
         data={products}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <View style={styles.productContainer}>
            <View style={styles.product}>
-           <Image source={item.image} style={styles.productImage} />
-            <ImageBackground>
+           <Image source={item.image} style={styles.productImage} resizeMode='contain' />
             <TouchableOpacity onPress={() => addToCart(item)} style={styles.addToCartButton}>
                 <Image source={require('../assets/add_circle.png')}/>
             </TouchableOpacity>
-            </ImageBackground>
            </View>
             <View style={styles.productDetails}>
               <Text style={styles.productTitle}>{item.title}</Text>
@@ -106,15 +117,37 @@ const HomeScreen = ({ navigation }) => {
           </View>
         )}
         numColumns={2}
+        showsVerticalScrollIndicator={false}
       />
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  firstSquare: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  secondSquare: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  filterList: {
+    flexDirection: 'row'
+  },
+  filter: {
+    width: 40,
+    height: 40,
+    marginRight: 10,
+    backgroundColor: '#f0f0f0',
+    alignItems: 'center',
+    borderRadius: 20,
+    justifyContent: 'center'
+  },
   container: {
     flex: 1,
     backgroundColor: '#fff',
+    padding:10
   },
   header: {
     flexDirection: 'row',
@@ -129,18 +162,23 @@ const styles = StyleSheet.create({
   },
   productContainer: {
     flex: 1,
-    padding: 10,
-    margin: 10,
-    width: '50%',
+    paddingBottom: 10,
+    paddingHorizontal:10,
+    width: "100%",
+  },
+  product : {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
   },
   productImage: {
     width: '100%',
-    height: 200,
-    resizeMode: 'cover',
-    borderRadius: 10,
+    flex: 1,
+    resizeMode: 'contain',  
   },
   productDetails: {
-    padding: 10,
+    padding: 5,
   },
   productTitle: {
     fontSize: 18,
@@ -158,11 +196,48 @@ const styles = StyleSheet.create({
   addToCartButton: {
     borderRadius: 5,
     alignItems: 'center',
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    top: 190,
+    width: 50,
+    height: 50,
   },
   addToCartButtonText: {
     color: '#fff',
     fontSize: 16,
   },
+  subHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 15
+  },
+  subHeaderText: {
+    fontSize: 24,
+    fontWeight: 200,
+    letterSpacing: 2
+  },
+  iconContainer: {
+    width: 50,
+    height: 50,
+    borderRadius: 15,
+    backgroundColor: '#f0f0f0',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  square: {
+    width: 10,
+    height: 10,
+    backgroundColor: '#ccc',
+    borderRadius: 2,
+  },
+  line: {
+    width: 15,
+    height: 2,
+    backgroundColor: '#ccc',
+    marginTop: 5,
+  }
 });
 
 export default HomeScreen;
